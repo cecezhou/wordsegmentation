@@ -69,7 +69,7 @@ class NoSpaceText:
 	def adjustVariable(self, variable, varValue):
 		self.spaces[variable] = varValue
 
-	def printText(self):
+	def getText(self):
 		ind = True
 		for i in xrange(len(self.factors)):
 			if not self.factors[factorIndex]:
