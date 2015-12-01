@@ -60,8 +60,8 @@ class NoSpaceText:
 		for i in xrange(self.length - 1):
 			if assignment[i] == None:
 				return True
-			if assignment[i]:
-				if not self.dict.check(self.text[prevSpace:(i+2)]):
+			if assignment[i] == 1:
+				if not self.dict.check(self.text[prevSpace:i]):
 					return False
 				prevSpace = i + 1
 		return True
