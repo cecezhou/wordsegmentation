@@ -11,6 +11,7 @@ class NoSpaceText:
 		self.factors = [None] * (self.length - self.maxWordLength + 1) # True if factor satisfied.
 		self.dict = enchant.Dict("en_US")
 		self.possiblePreviousSpaces = [None] * (self.length + 1)
+		self.dict.add("haoqing")
 
 		# for char in "bcdefghjklmnopqrstuvwxyz":
 		# 	self.dict.remove(char)
