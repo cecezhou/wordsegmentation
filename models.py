@@ -2,17 +2,13 @@ import enchant
 
 """ Note: variable positions are after char positions, var_0 is after 0th char """
 
-
-# class searchAgent():
-# 	def getAction():
-
 class NoSpaceText:
 	def __init__(self, inputText, maxWordLength):
 		self.text = inputText
 		self.length = len(inputText)
 		self.maxWordLength = maxWordLength
 		self.spaces = [None] * (self.length - 1)
-		self.factors = [0] * (self.length - self.maxWordLength +1)
+		self.factors = [None] * (self.length - self.maxWordLength + 1) # True if factor satisfied.
 		self.dict = enchant.Dict("en_US")
 		self.possiblePreviousSpaces = [None] * (self.length + 1)
 
@@ -37,7 +33,7 @@ class NoSpaceText:
 			if foundWord ==	 1:
 				# append character
 				currWord += factorText[i]
-			if self.spaces[i + factorIndex] == 1:
+			if self.spaces[i + factorIndex]:
 				# we have already seen a space
 				if foundWord == 1:
 					wordList.append(currWord)
@@ -51,17 +47,44 @@ class NoSpaceText:
 
 	def checkFactor(self, factorIndex):
 		wordList = self.findWordsInFactor(factorIndex)
-		print wordList
 		for word in wordList:
 			if self.dict.check(word) == False:
+				self.factors[factorIndex] = False
 				return False
+		self.factors[factorIndex] = True
+		return True
+
+	# Checks partial assignments until first None.
+	def checkAssignment(self, assignment):
+		prevSpace = 0
+		for i in xrange(self.length - 1):
+			if assignment[i] == None:
+				return True
+			if assignment[i]:
+				if not self.dict.check(self.text[prevSpace:(i+2)]):
+					return False
+				prevSpace = i + 1
 		return True
 
 	def adjustVariable(self, variable, varValue):
 		self.spaces[variable] = varValue
 
 	def printText(self):
-		pass
+		ind = True
+		for i in xrange(len(self.factors)):
+			if not self.factors[factorIndex]:
+				ind = False
+				break
+		if ind:
+			output = ""
+			for i in xrange(self.length - 1):
+				output += self.text[i]
+				if self.spaces:
+					output += " "
+			output += self.text(self.length - 1)
+			return output
+		else:
+			return "No valid segmentation found."
 
 	def dpSearch(self):
 		self.possiblePreviousSpaces[0] = [0]
@@ -79,6 +102,19 @@ class NoSpaceText:
 		pass
 		# for i in xrange(self.possiblePreviousSpaces):
 
-
-
-	
+	def classicalSolve(self):
+		spaces = [None] * (self.length - 1)
+		queue = [([None] * (self.length - 1), 0)]
+		while(True):
+			(assignment, num) = queue.pop(0)
+			ind = True
+			for i in xrange(1):
+				assignment[num] = i
+				if checkAssignment(assignment):
+					if num == self.length - 1:
+						ind = False
+						return assignment
+					else:
+						queue.append((assignment, num + 1))
+			if ind:
+				return None

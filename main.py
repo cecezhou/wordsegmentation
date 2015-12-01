@@ -1,6 +1,8 @@
 import models
 
-text = "mynameisteddythisisalongsentencepleaseworkthankyou"
+text = "mynamei"
+#steddythisisalongsentencepleaseworkthankyou"
+
 
 mytext = models.NoSpaceText(text, 10)
 
@@ -24,4 +26,8 @@ mytext = models.NoSpaceText(text, 10)
 # print mytext.getFactor(4)
 # print mytext.getFactor(5)
 
-print mytext.dpSearch()
+
+# print mytext.dpSearch()
+
+assignment = [0] * 7
+print mytext.checkAssignment(assignment)
