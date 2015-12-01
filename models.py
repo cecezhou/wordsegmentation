@@ -1,4 +1,4 @@
-import enchant
+# import enchant
 
 """ Note: variable positions are after char positions, var_0 is after 0th char """
 
@@ -9,7 +9,7 @@ class NoSpaceText:
 		self.maxWordLength = maxWordLength
 		self.spaces = [None] * (self.length - 1)
 		self.factors = [None] * (self.length - self.maxWordLength + 1) # True if factor satisfied.
-		self.dict = enchant.Dict("en_US")
+		# self.dict = enchant.Dict("en_US")
 		self.possiblePreviousSpaces = [None] * (self.length + 1)
 
 		# for char in "bcdefghjklmnopqrstuvwxyz":
@@ -79,7 +79,7 @@ class NoSpaceText:
 			output = ""
 			for i in xrange(self.length - 1):
 				output += self.text[i]
-				if self.spaces:
+				if self.spaces[i]:
 					output += " "
 			output += self.text[self.length - 1]
 			return output

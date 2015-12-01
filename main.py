@@ -1,10 +1,12 @@
 import models
 
-text = "mynamei"
+text = "myname"
 #steddythisisalongsentencepleaseworkthankyou"
 
 
 mytext = models.NoSpaceText(text, 10)
+mytext.spaces = [0,1,0,0,0,0]
+print mytext.printText()
 
 # mytext.adjustVariable(1, 1)
 # mytext.adjustVariable(5, 1)
@@ -30,3 +32,4 @@ print mytext.dpSearch()
 
 assignment = [0] * 7
 print mytext.checkAssignment(assignment)
+
