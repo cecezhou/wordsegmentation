@@ -14,6 +14,12 @@ class NoSpaceText:
 		self.spaces = [None] * (self.length - 1)
 		self.factors = [0] * (self.length - self.maxWordLength +1)
 		self.dict = enchant.Dict("en_US")
+		self.possiblePreviousSpaces = [None] * (self.length + 1)
+
+		# for char in "bcdefghjklmnopqrstuvwxyz":
+		# 	self.dict.remove(char)
+		# self.dict.add("I")
+		# self.dict.add("i")
 
 	def getFactor(self, factorIndex):
 		return self.text[factorIndex:(factorIndex + self.maxWordLength)]
@@ -53,6 +59,25 @@ class NoSpaceText:
 
 	def adjustVariable(self, variable, varValue):
 		self.spaces[variable] = varValue
+
+	def printText(self):
+		pass
+
+	def dpSearch(self):
+		self.possiblePreviousSpaces[0] = [0]
+		for i in xrange(1, self.length + 1):
+			self.possiblePreviousSpaces[i] = []
+			for j in xrange(1, self.maxWordLength):
+				if (i - j) >= 0:
+					if self.dict.check(self.text[i - j: i]) and self.possiblePreviousSpaces[i-j]:
+						self.possiblePreviousSpaces[i].append(i - j)
+		if self.possiblePreviousSpaces[self.length]:
+			return True
+		return False
+
+
+	def setVariablesFromDP(self):
+		pass
 
 
 	
