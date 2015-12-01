@@ -1,4 +1,4 @@
-# import enchant
+import enchant
 
 """ Note: variable positions are after char positions, var_0 is after 0th char """
 
@@ -9,7 +9,7 @@ class NoSpaceText:
 		self.maxWordLength = maxWordLength
 		self.spaces = [None] * (self.length - 1)
 		self.factors = [None] * (self.length - self.maxWordLength + 1) # True if factor satisfied.
-		# self.dict = enchant.Dict("en_US")
+		self.dict = enchant.Dict("en_US")
 		self.possiblePreviousSpaces = [None] * (self.length + 1)
 
 		# for char in "bcdefghjklmnopqrstuvwxyz":
@@ -71,8 +71,8 @@ class NoSpaceText:
 
 	def getText(self):
 		ind = True
-		for i in xrange(len(self.factors)):
-			if not self.factors[factorIndex]:
+		for i in xrange(self.length - 1):
+			if self.spaces[i] == None:
 				ind = False
 				break
 		if ind:
@@ -91,23 +91,25 @@ class NoSpaceText:
 		for i in xrange(1, self.length + 1):
 			self.possiblePreviousSpaces[i] = []
 			for j in xrange(1, self.maxWordLength):
-				if (i - j) >= 0:
-					if self.dict.check(self.text[i - j: i]) and self.possiblePreviousSpaces[i-j]:
-						self.possiblePreviousSpaces[i].append(i - j)
+				k = self.maxWordLength - j
+				if (i - k) >= 0:
+					if self.dict.check(self.text[i - k: i]) and self.possiblePreviousSpaces[i-k]:
+						self.possiblePreviousSpaces[i].append(i - k)
 		if self.possiblePreviousSpaces[self.length]:
 			self.setVariablesFromDP()
-			self.printText()
+			# self.getText()
 			return True
 		return False
 
 	def setVariablesFromDP(self):
 		lenSpaces = len(self.possiblePreviousSpaces)
 		index = lenSpaces - 1
+		for i in xrange(len(self.spaces)):
+			self.spaces[i] = 0
 		while index != 0:
 			if index != lenSpaces - 1 :
 				self.adjustVariable(index - 1, 1)
 			index = self.possiblePreviousSpaces[index][0]
-
 
 	def classicalSolve(self):
 		spaces = [None] * (self.length - 1)
