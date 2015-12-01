@@ -60,12 +60,15 @@ class NoSpaceText:
 		prevSpace = 0
 		for i in xrange(self.length - 1):
 			if assignment[i] == None:
-				return True
+				prevSpace = -1
 			if assignment[i] == 1:
-				if not self.dict.check(self.text[prevSpace:i]):
+				if not self.dict.check(self.text[prevSpace:(i+1)]):
 					return False
 				prevSpace = i + 1
-		return True
+		if prevSpace == -1:
+			return True
+		else:
+			return self.dict.check(self.text[prevSpace:])
 
 	def adjustVariable(self, variable, varValue):
 		self.spaces[variable] = varValue
@@ -113,18 +116,20 @@ class NoSpaceText:
 			index = self.possiblePreviousSpaces[index][0]
 
 	def classicalSolve(self):
-		spaces = [None] * (self.length - 1)
 		queue = [([None] * (self.length - 1), 0)]
-		while(True):
+		while(len(queue) > 0):
 			(assignment, num) = queue.pop(0)
-			ind = True
-			for i in xrange(1):
+			ind = False
+			for i in xrange(2):
 				assignment[num] = i
-				if checkAssignment(assignment):
-					if num == self.length - 1:
-						ind = False
+				if self.checkAssignment(assignment):
+					if num == self.length - 1 and i == 1:
+						ind = True
+						self.spaces = assignment
 						return assignment
-					else:
-						queue.append((assignment, num + 1))
+					elif num < self.length - 2:
+						copy = list(assignment)
+						queue.append((copy, num + 1))
 			if ind:
-				return None
+				break
+		return None

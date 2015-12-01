@@ -1,6 +1,6 @@
 import models
 
-text = "mynamei"
+text = "mynameis"
 
 mytext = models.NoSpaceText(text, 10)
 # mytext.spaces = [0,1,0,0,0,0]
@@ -26,9 +26,7 @@ mytext = models.NoSpaceText(text, 10)
 # print mytext.getFactor(4)
 # print mytext.getFactor(5)
 
-print mytext.dpSearch()
+# assignment = [0, None, None, None, None, None, ]
+
+print mytext.classicalSolve()
 print mytext.getText()
-
-assignment = [0, 0, 0, 0, 0, 0, 1]
-print mytext.checkAssignment(assignment)
-
