@@ -75,9 +75,10 @@ class NoSpaceText:
 			return True
 		return False
 
-
 	def setVariablesFromDP(self):
 		pass
+		# for i in xrange(self.possiblePreviousSpaces):
+
 
 
 	
