@@ -81,7 +81,7 @@ class NoSpaceText:
 				output += self.text[i]
 				if self.spaces:
 					output += " "
-			output += self.text(self.length - 1)
+			output += self.text[self.length - 1]
 			return output
 		else:
 			return "No valid segmentation found."
@@ -95,12 +95,19 @@ class NoSpaceText:
 					if self.dict.check(self.text[i - j: i]) and self.possiblePreviousSpaces[i-j]:
 						self.possiblePreviousSpaces[i].append(i - j)
 		if self.possiblePreviousSpaces[self.length]:
+			self.setVariablesFromDP()
+			self.printText()
 			return True
 		return False
 
 	def setVariablesFromDP(self):
-		pass
-		# for i in xrange(self.possiblePreviousSpaces):
+		lenSpaces = len(self.possiblePreviousSpaces)
+		index = lenSpaces - 1
+		while index != 0:
+			if index != lenSpaces - 1 :
+				self.adjustVariable(index - 1, 1)
+			index = self.possiblePreviousSpaces[index][0]
+
 
 	def classicalSolve(self):
 		spaces = [None] * (self.length - 1)
