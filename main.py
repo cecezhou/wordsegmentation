@@ -17,15 +17,18 @@ import enchant
 # text = "mynameis"
 
 
-
-
 # print freq_dict
 # get frequencies of transitions 
 
 
-text = "Ilovedonkeystheyarebluegreenandredandjuicy"
-
-mytext = models.NoSpaceText(text, 10)
+#text = "willIfinishthisproblemsetintimeforvanillawhataresomewordsthatmightnotworkoutchocolatedon't"
+text = "paidforsleepingtogetherThiswastheendofthetrapThiswaswhatpeoplegotforlovingeachotherThankGodforgasanywayWhatmustithavebeenlikebeforetherewereanaesthetics"
+#"Onceitstartedtheywereinthemill"
+# "raceCatherinehadagoodtimeinthetimeofpregnancy"
+#text = "Itwasn'tbadShewashardlyeversickShewasnotawfullyuncomfortableuntiltowardthelastSonowtheygotherintheend"
+#text = open('condensed.txt').read()
+print text
+mytext = models.NoSpaceText(text, 15)
 #mytext.getFreq('alphanumeric.txt')
 
 
@@ -56,10 +59,13 @@ mytext = models.NoSpaceText(text, 10)
 
 # print mytext.classicalSolve()
 print "DP:"
-print mytext.dpSearch()
+mytext.dpGreedy()
+
+mytext.getFreq("alphanumeric.txt")
+print mytext.getBestSegmentation()
 # print mytext.getText()
-print "Classical:"
-print mytext.classicalSolve()
+# print "Classical:"
+# print mytext.classicalSearch()
 
 
 # assume words given sentence length is Normal

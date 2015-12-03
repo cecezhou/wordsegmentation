@@ -12,6 +12,9 @@ class NoSpaceText:
 		self.dict = enchant.Dict("en_US")
 		self.possiblePreviousSpaces = [None] * (self.length + 1)
 		self.dict.add("haoqing")
+		self.normalizationFactor = 1
+		self.freq_dict = {}
+		self.possibleStrings = []
 
 		for char in "bcdefghjklmnopqrstuvwxyz":
 			self.dict.remove(char)
@@ -104,9 +107,43 @@ class NoSpaceText:
 			for path in paths:
 				self.setVariablesFromPossibility(path)
 				listofStrings.append(self.getText())
+			self.possibleStrings = listofStrings
 			return listofStrings
 		return None
 
+	def dpGreedy(self):
+		self.possiblePreviousSpaces[0] = [0]
+		for i in xrange(1, self.length + 1):
+			self.possiblePreviousSpaces[i] = []
+			for j in xrange(1, self.maxWordLength):
+
+				# get best one where previous one also exists
+				bestprob = 0
+				prevspace = None
+				k = self.maxWordLength - j
+				if (i - k) >= 0:
+					word = self.text[i - k: i]
+					if self.dict.check(word) and self.possiblePreviousSpaces[i-k]:
+						frequency = 1
+						if word in self.freq_dict:
+							frequency = self.freq_dict[word]
+						else:
+							frequency = self.normalizationFactor
+						if frequency > bestprob:
+							prevspace = (i - k)
+							bestprob = frequency
+				if bestprob > 0:
+					self.possiblePreviousSpaces[i].append(prevspace)
+		if self.possiblePreviousSpaces[self.length]:
+			paths = self.getPossibilitiesList()
+			print "paths"
+			listofStrings = []
+			for path in paths:
+				self.setVariablesFromPossibility(path)
+				listofStrings.append(self.getText())
+			self.possibleStrings = listofStrings
+			return listofStrings
+		return None
 
 	def getPossibilitiesList(self):
 		paths = []
@@ -121,6 +158,7 @@ class NoSpaceText:
 					stack.append(newPath)
 				else:
 					paths.append(currentPath)
+
 		return paths
 
 
@@ -154,6 +192,7 @@ class NoSpaceText:
 			for assignment in ls:
 				self.spaces = assignment
 				results.append(self.getText())
+			self.possibleStrings = results
 			return results
 		else:
 			return None
@@ -178,5 +217,20 @@ class NoSpaceText:
 				else:
 					freq_dict[word] = 1
 		self.freq_dict = self.normalize(freq_dict)
-		# print self.freq_dict
+	
+	def getBestSegmentation(self):
+		maxProb = 0
+		bestString = ""
+		for string in self.possibleStrings:
+			prob = 1
+			wordList = string.split()
+			for word in wordList:
+				if word in self.freq_dict:
+					prob *= self.freq_dict[word]
+				else:
+					prob *= self.normalizationFactor
+			if prob > maxProb:
+				bestString = string
+				maxProb = prob
+		return bestString
 
