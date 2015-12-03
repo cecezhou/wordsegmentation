@@ -132,7 +132,7 @@ class NoSpaceText:
 			self.adjustVariable(possibility[i] - 1, 1)
 
 
-	def classicalSolve(self):
+	def classicalSearch(self):
 		queue = [([None] * (self.length - 1), 0)]
 		ls = []
 		ind = False
