@@ -95,20 +95,38 @@ class NoSpaceText:
 					if self.dict.check(self.text[i - k: i]) and self.possiblePreviousSpaces[i-k]:
 						self.possiblePreviousSpaces[i].append(i - k)
 		if self.possiblePreviousSpaces[self.length]:
-			self.setVariablesFromDP()
-			# self.getText()
+			paths = self.getPossibilitiesList()
+			print paths
+			for path in paths:
+				self.setVariablesFromPossibility(path)
+				print self.getText()
 			return True
 		return False
 
-	def setVariablesFromDP(self):
+
+	def getPossibilitiesList(self):
+		paths = []
+		stack = [[self.length]]
+		currentPath = None
+		while stack != []:
+			currentPath = stack.pop()
+			# get paths from last index of path
+			for possibility in self.possiblePreviousSpaces[currentPath[-1]]:
+				if possibility != 0:
+					newPath = currentPath + [possibility]
+					stack.append(newPath)
+				else:
+					paths.append(currentPath)
+		return paths
+
+
+	def setVariablesFromPossibility(self, possibility):
 		lenSpaces = len(self.possiblePreviousSpaces)
-		index = lenSpaces - 1
 		for i in xrange(len(self.spaces)):
-			self.spaces[i] = 0
-		while index != 0:
-			if index != lenSpaces - 1 :
-				self.adjustVariable(index - 1, 1)
-			index = self.possiblePreviousSpaces[index][0]
+			self.adjustVariable(i, 0)
+		for i in xrange(1, len(possibility)):
+			self.adjustVariable(possibility[i] - 1, 1)
+
 
 	def classicalSolve(self):
 		queue = [([None] * (self.length - 1), 0)]
@@ -128,5 +146,27 @@ class NoSpaceText:
 			if ind:
 				break
 		return None
+	
+	def normalize(self, d):
+		factor=1.0/sum(d.itervalues())
+		for k in d:
+	  		d[k] = d[k]*factor
+	  	self.normalizationFactor = factor
+	  	return d
 
+	def getFreq(self, text):
+		# get frequencies
+		freq_dict = {}
+		mydict = enchant.Dict("en_US")
+
+		f = open(text)
+		for word in f.read().split():
+			word = word.lower()
+			if mydict.check(word):
+				if word in freq_dict:
+					freq_dict[word] += 1
+				else:
+					freq_dict[word] = 1
+		self.freq_dict = self.normalize(freq_dict)
+		# print self.freq_dict
 
