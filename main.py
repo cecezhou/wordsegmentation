@@ -54,9 +54,11 @@ mytext = models.NoSpaceText(text, 10)
 # assignment = [0, None, None, None, None, None, ]
 
 # print mytext.classicalSolve()
-print mytext.dpSearch()
+print "DP:"
+mytext.dpSearch()
 # print mytext.getText()
-print mytext.classicalSolve()
+print "Classical:"
+mytext.classicalSolve()
 
 # assume words given sentence length is Normal
 # use chars per word distribution

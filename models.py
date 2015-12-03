@@ -142,12 +142,16 @@ class NoSpaceText:
 				if self.checkAssignment(assignment):
 					if num == (self.length - 2):
 						ind = True
-						ls.append(assignment)
+						assignmentCopy = list(assignment)
+						ls.append(assignmentCopy)
 					elif num < self.length - 2:
 						copy = list(assignment)
 						# print (copy, num + 1)
 						queue.append((copy, num + 1))
 		if ind:
+			for assignment in ls:
+				self.spaces = assignment
+				print self.getText()
 			return ls
 		else:
 			return None
