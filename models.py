@@ -13,11 +13,6 @@ class NoSpaceText:
 		self.possiblePreviousSpaces = [None] * (self.length + 1)
 		self.dict.add("haoqing")
 
-		# for char in "bcdefghjklmnopqrstuvwxyz":
-		# 	self.dict.remove(char)
-		# self.dict.add("I")
-		# self.dict.add("i")
-
 	def getFactor(self, factorIndex):
 		return self.text[factorIndex:(factorIndex + self.maxWordLength)]
 
@@ -133,3 +128,5 @@ class NoSpaceText:
 			if ind:
 				break
 		return None
+
+
