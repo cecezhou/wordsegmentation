@@ -9,6 +9,13 @@ import enchant
 #open('alphanumeric.txt', 'w').write(new_str)
 
 
+# string = open('farewell_to_arms.txt').read()
+# new_str = re.sub('[^a-zA-Z\n\']', ' ', string)
+# new_str.replace(' \' ','')
+# open('alphanumeric.txt', 'w').write(new_str)
+
+# text = "mynameis"
+
 
 
 
@@ -19,6 +26,7 @@ text = "mynameisteddyhiwhat"
 
 mytext = models.NoSpaceText(text, 10)
 #mytext.getFreq('alphanumeric.txt')
+
 
 # mytext.spaces = [0,1,0,0,0,0]
 # print mytext.printText()
@@ -48,6 +56,7 @@ mytext = models.NoSpaceText(text, 10)
 # print mytext.classicalSolve()
 print mytext.dpSearch()
 # print mytext.getText()
+print mytext.classicalSolve()
 
 # assume words given sentence length is Normal
 # use chars per word distribution
