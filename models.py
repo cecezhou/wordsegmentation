@@ -13,6 +13,9 @@ class NoSpaceText:
 		self.possiblePreviousSpaces = [None] * (self.length + 1)
 		self.dict.add("haoqing")
 
+		for char in "bcdefghjklmnopqrstuvwxyz":
+			self.dict.remove(char)
+
 	def getFactor(self, factorIndex):
 		return self.text[factorIndex:(factorIndex + self.maxWordLength)]
 
@@ -112,21 +115,23 @@ class NoSpaceText:
 
 	def classicalSolve(self):
 		queue = [([None] * (self.length - 1), 0)]
+		ls = []
+		ind = False
 		while(len(queue) > 0):
 			(assignment, num) = queue.pop(0)
-			ind = False
 			for i in xrange(2):
 				assignment[num] = i
 				if self.checkAssignment(assignment):
-					if num == self.length - 1 and i == 1:
+					if num == (self.length - 2):
 						ind = True
-						self.spaces = assignment
-						return assignment
+						ls.append(assignment)
 					elif num < self.length - 2:
 						copy = list(assignment)
+						print (copy, num + 1)
 						queue.append((copy, num + 1))
-			if ind:
-				break
-		return None
+		if ind:
+			return ls
+		else:
+			return None
 
 
