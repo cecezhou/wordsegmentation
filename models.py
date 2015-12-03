@@ -149,10 +149,11 @@ class NoSpaceText:
 						# print (copy, num + 1)
 						queue.append((copy, num + 1))
 		if ind:
+			results = []
 			for assignment in ls:
 				self.spaces = assignment
-				print self.getText()
-			return ls
+				results.append(self.getText())
+			return results
 		else:
 			return None
 	
