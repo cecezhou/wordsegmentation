@@ -22,7 +22,7 @@ import enchant
 # print freq_dict
 # get frequencies of transitions 
 
-text = "mynameisteddyhiwhat"
+text = "mynameisteddyhiwhatwillIdotomorrowtheyareyummywhatismylifepleasehelpmeeatallthefood"
 
 mytext = models.NoSpaceText(text, 10)
 #mytext.getFreq('alphanumeric.txt')
@@ -55,10 +55,11 @@ mytext = models.NoSpaceText(text, 10)
 
 # print mytext.classicalSolve()
 print "DP:"
-mytext.dpSearch()
+print mytext.dpSearch()
 # print mytext.getText()
 print "Classical:"
 mytext.classicalSolve()
+
 
 # assume words given sentence length is Normal
 # use chars per word distribution

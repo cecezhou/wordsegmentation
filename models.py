@@ -100,11 +100,12 @@ class NoSpaceText:
 		if self.possiblePreviousSpaces[self.length]:
 			paths = self.getPossibilitiesList()
 			# print paths
+			listofStrings = []
 			for path in paths:
 				self.setVariablesFromPossibility(path)
-				print self.getText()
-			return True
-		return False
+				listofStrings.append(self.getText())
+			return listofStrings
+		return None
 
 
 	def getPossibilitiesList(self):
