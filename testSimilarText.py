@@ -11,7 +11,6 @@ text = open(basetext).read()
 helpers.parseBaseText()
 print "Segmenting Text..."
 
-
 # remove excess line breaks and all punctuation except periods
 cleantext = re.sub('[^a-zA-Z\n\'.]', ' ', text)
 # write to file (for testing purposes)
