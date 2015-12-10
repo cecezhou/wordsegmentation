@@ -55,18 +55,20 @@ def getTransitionFreq(textfile):
 	(transition_freq_dict, factor) = normalize(transition_freq_dict)
 	return (transition_freq_dict, factor)
 
+# customize dictionary
 def modifyDictionary():
+	mydict = enchant.Dict("en-US")
 	mydict.add("haoqing")
 
 	for char in "bcdefghjklmnopqrstuvwxyz":
-		self.dict.remove(char)
+		mydict.remove(char)
 
-	self.dict.remove("int")
+	mydict.remove("int")
 
 	twoletter = open('twoletter.txt').read()
 	twoletterlist = twoletter.split()
 	for word in twoletterlist:
-		self.dict.remove(word)
+		mydict.remove(word)
 
 
 def compare(s1, s2):
@@ -78,8 +80,3 @@ def compare(s1, s2):
 		if w1.lower() != w2.lower():
 			return False 
 	return True
-
-# string1 = "they    truly  beat  me"
-# string2 = "They truly beat me"
-
-# print compare(string1, string2)
