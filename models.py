@@ -1,5 +1,5 @@
 import enchant
-import parsebasetext
+import helpers
 """ Note: variable positions are after char positions, var_0 is after 0th char """
  
 class NoSpaceText:
@@ -11,10 +11,16 @@ class NoSpaceText:
 		self.factors = [None] * (self.length - self.maxWordLength + 1) # True if factor satisfied.
 		self.dict = enchant.Dict("en_US")
 		self.possiblePreviousSpaces = [None] * (self.length + 1)
-		(self.freq_dict, self.normFactor)= parsebasetext.getFreq("alphanumeric.txt")
-		(self.transition_freq_dict, self.transNormFactor) = parsebasetext.getTransitionFreq("alphanumeric.txt")
 		self.possibleStrings = []
-
+		self.freq_dict = {}
+		self.transition_freq_dict = {}
+		self.normFactor = 1
+		self.transNormFactor = 1
+	# default is to use whatever is in alphanumeric.txt, but you can give it what you want 
+	def initalizeFrequencies(basetext = "alphanumeric.txt"):
+		(self.freq_dict, self.normFactor) = helpers.getFreq(basetext)
+		(self.transition_freq_dict, self.transNormFactor) = helpers.getTransitionFreq(basetext)
+		return (self.freq_dict, self.normFactor, self.transition_freq_dict, self.transNormFactor)
 
 	def getFactor(self, factorIndex):
 		return self.text[factorIndex:(factorIndex + self.maxWordLength)]

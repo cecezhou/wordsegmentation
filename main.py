@@ -21,6 +21,7 @@ mytext = models.NoSpaceText(text, 15)
 
 print "DP: naive probability"
 
+
 mytext.dpGreedy()
 print mytext.getBestSeg()
 
@@ -59,4 +60,6 @@ print mytext.getBestSeg()
 # print mytext.getFactor(5)
 
 # print mytext.getText()
+
 # print mytext.classicalSearch()
+
