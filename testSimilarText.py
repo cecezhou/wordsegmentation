@@ -3,6 +3,7 @@ import re
 import enchant
 import helpers
 
+print("--- %s seconds ---\n" % (time.time() - start_time))
 # Use "Old man and the Sea" to see how accurate we are.
 # print out comparision numbers for different algorithms - two different greedy ones AND COMPARE
 
