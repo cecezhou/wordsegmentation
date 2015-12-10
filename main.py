@@ -7,23 +7,32 @@ import parsebasetext
 # get frequencies of transitions 
 # text = "thequickbrownfoxjumpsoverthelazydog"
 
-text = "willIfinishthisproblemsetintimeforvanillawhataresomewordsthatmightnotworkoutchocolatedon't"
+# text = "willIfinishthisproblemsetintimeforvanillawhataresomewordsthatmightnotworkoutchocolatedon't"
 # text = "paidforsleepingtogetherThiswastheendofthetrapThiswaswhatpeoplegotforlovingeachotherThankGodforgasanywayWhatmustithavebeenlikebeforetherewereanaestheticsOnceitstartedtheywereinthemillraceCatherinehadagoodtimeinthetimeofpregnancyItwasn'tbadShewashardlyeversickShewasnotawfullyuncomfortableuntiltowardthelastSonowtheygotherintheend"
-# text = open('condensed.txt').read()
-# text = "I'mgoingtolifesciencesclass"
+text = open('condensed.txt').read()
 print text
+
 mytext = models.NoSpaceText(text, 15)
-print mytext.dpGreedy()
+
+# print "DP: normal "
+
+# mytext.dpSearch()
+# print mytext.getBestSeg()
+
+print "DP: naive probability"
+
+mytext.dpGreedy()
 print mytext.getBestSeg()
 
 #mytext.getFreq('alphanumeric.txt')
 # print mytext.classicalSolve()
 
-print "DP:"
 # mytext.getFreq("alphanumeric.txt")
 # mytext.getTransitionFreq("alphanumeric.txt")
+print "DP: transition probability"
 
-print mytext.dpGreedy(transFreq = True)
+
+mytext.dpGreedy(transFreq = True)
 
 print mytext.getBestSeg()
 
