@@ -1,7 +1,7 @@
 import enchant
-
+import parsebasetext
 """ Note: variable positions are after char positions, var_0 is after 0th char """
-
+ 
 class NoSpaceText:
 	def __init__(self, inputText, maxWordLength):
 		self.text = inputText
@@ -11,13 +11,10 @@ class NoSpaceText:
 		self.factors = [None] * (self.length - self.maxWordLength + 1) # True if factor satisfied.
 		self.dict = enchant.Dict("en_US")
 		self.possiblePreviousSpaces = [None] * (self.length + 1)
-		self.dict.add("haoqing")
-		self.normalizationFactor = 1
-		self.freq_dict = {}
+		(self.freq_dict, self.normFactor)= parsebasetext.getFreq("alphanumeric.txt")
+		(self.transition_freq_dict, self.transNormFactor) = parsebasetext.getTransitionFreq("alphanumeric.txt")
 		self.possibleStrings = []
 
-		for char in "bcdefghjklmnopqrstuvwxyz":
-			self.dict.remove(char)
 
 	def getFactor(self, factorIndex):
 		return self.text[factorIndex:(factorIndex + self.maxWordLength)]
@@ -91,85 +88,6 @@ class NoSpaceText:
 		else:
 			return "No valid segmentation found."
 
-	def dpSearch(self):
-		self.possiblePreviousSpaces[0] = [0]
-		for i in xrange(1, self.length + 1):
-			self.possiblePreviousSpaces[i] = []
-			for j in xrange(1, self.maxWordLength):
-				k = self.maxWordLength - j
-				if (i - k) >= 0:
-					if self.dict.check(self.text[i - k: i]) and self.possiblePreviousSpaces[i-k]:
-						self.possiblePreviousSpaces[i].append(i - k)
-		if self.possiblePreviousSpaces[self.length]:
-			paths = self.getPossibilitiesList()
-			# print paths
-			listofStrings = []
-			for path in paths:
-				self.setVariablesFromPossibility(path)
-				listofStrings.append(self.getText())
-			self.possibleStrings = listofStrings
-			return listofStrings
-		return None
-
-	def dpGreedy(self):
-		self.possiblePreviousSpaces[0] = [0]
-		for i in xrange(1, self.length + 1):
-			self.possiblePreviousSpaces[i] = []
-			for j in xrange(1, self.maxWordLength):
-
-				# get best one where previous one also exists
-				bestprob = 0
-				prevspace = None
-				k = self.maxWordLength - j
-				if (i - k) >= 0:
-					word = self.text[i - k: i]
-					if self.dict.check(word) and self.possiblePreviousSpaces[i-k]:
-						frequency = 1
-						if word in self.freq_dict:
-							frequency = self.freq_dict[word]
-						else:
-							frequency = self.normalizationFactor
-						if frequency > bestprob:
-							prevspace = (i - k)
-							bestprob = frequency
-				if bestprob > 0:
-					self.possiblePreviousSpaces[i].append(prevspace)
-		if self.possiblePreviousSpaces[self.length]:
-			paths = self.getPossibilitiesList()
-			print "paths"
-			listofStrings = []
-			for path in paths:
-				self.setVariablesFromPossibility(path)
-				listofStrings.append(self.getText())
-			self.possibleStrings = listofStrings
-			return listofStrings
-		return None
-
-	def getPossibilitiesList(self):
-		paths = []
-		stack = [[self.length]]
-		currentPath = None
-		while stack != []:
-			currentPath = stack.pop()
-			# get paths from last index of path
-			for possibility in self.possiblePreviousSpaces[currentPath[-1]]:
-				if possibility != 0:
-					newPath = currentPath + [possibility]
-					stack.append(newPath)
-				else:
-					paths.append(currentPath)
-
-		return paths
-
-
-	def setVariablesFromPossibility(self, possibility):
-		lenSpaces = len(self.possiblePreviousSpaces)
-		for i in xrange(len(self.spaces)):
-			self.adjustVariable(i, 0)
-		for i in xrange(1, len(possibility)):
-			self.adjustVariable(possibility[i] - 1, 1)
-
-
 	def classicalSearch(self):
 		queue = [([None] * (self.length - 1), 0)]
 		ls = []
@@ -196,29 +114,102 @@ class NoSpaceText:
 			return results
 		else:
 			return None
-	
-	def normalize(self, d):
-		factor=1.0/sum(d.itervalues())
-		for k in d:
-	  		d[k] = d[k]*factor
-	  	self.normalizationFactor = factor
-	  	return d
 
-	def getFreq(self, text):
-		# get frequencies
-		freq_dict = {}
-		mydict = enchant.Dict("en_US")
-		f = open(text)
-		for word in f.read().split():
-			word = word.lower()
-			if mydict.check(word):
-				if word in freq_dict:
-					freq_dict[word] += 1
+
+	def dpSearch(self):
+		self.possiblePreviousSpaces[0] = [0]
+		for i in xrange(1, self.length + 1):
+			self.possiblePreviousSpaces[i] = []
+			for j in xrange(1, self.maxWordLength):
+				k = self.maxWordLength - j
+				if (i - k) >= 0:
+					word = self.text[i - k: i].lower()
+					if self.dict.check(word) and self.possiblePreviousSpaces[i-k]:
+						self.possiblePreviousSpaces[i].append(i - k)
+		if self.possiblePreviousSpaces[self.length]:
+			paths = self.getPossibilitiesList()
+			# print paths
+			listofStrings = []
+			for path in paths:
+				self.setVariablesFromPossibility(path)
+				listofStrings.append(self.getText())
+			self.possibleStrings = listofStrings
+			return listofStrings
+		return None
+
+	def dpGreedy(self, transFreq = False):
+
+		self.possiblePreviousSpaces[0] = [0]
+		for i in xrange(1, self.length + 1):
+			self.possiblePreviousSpaces[i] = []
+			bestprob = 0
+			prevspace = None
+			for j in xrange(1, self.maxWordLength):
+				# get best one where previous one also exists
+				k = self.maxWordLength - j
+				if (i - k) >= 0:
+					word = self.text[i - k: i].lower()
 				else:
-					freq_dict[word] = 1
-		self.freq_dict = self.normalize(freq_dict)
-	
-	def getBestSegmentation(self):
+					continue
+				if self.dict.check(word) and self.possiblePreviousSpaces[i-k]:
+					frequency = 1
+					if transFreq == False:
+						if word in self.freq_dict:
+							frequency = self.freq_dict[word]
+						else:
+							frequency = self.normFactor/2
+					else: 
+						# get previous word
+						end = i - k
+						start = self.possiblePreviousSpaces[i-k][0]
+						prevword = self.text[start:end]
+						if (prevword, word) in self.transition_freq_dict:
+							frequency = self.transition_freq_dict[prevword, word]
+						else:
+							frequency = self.transNormFactor/2
+						prevword = word
+					if frequency > bestprob:
+						prevspace = (i - k)
+						bestprob = frequency
+			if bestprob > 0:
+				self.possiblePreviousSpaces[i].append(prevspace)
+
+		# find possible strings from possiblePreviousSpaces
+		if self.possiblePreviousSpaces[self.length]:
+			paths = self.getPossibilitiesList()
+			listofStrings = []
+			for path in paths:
+				self.setVariablesFromPossibility(path)
+				listofStrings.append(self.getText())
+			self.possibleStrings = listofStrings
+			return listofStrings
+		return None
+
+	def getPossibilitiesList(self):
+		paths = []
+		stack = [[self.length]]
+		currentPath = None
+		while stack != []:
+			currentPath = stack.pop()
+			# get paths from last index of path
+			for possibility in self.possiblePreviousSpaces[currentPath[-1]]:
+				if possibility != 0:
+					newPath = currentPath + [possibility]
+					stack.append(newPath)
+				else:
+					paths.append(currentPath)
+		return paths
+
+
+	def setVariablesFromPossibility(self, possibility):
+		lenSpaces = len(self.possiblePreviousSpaces)
+		for i in xrange(len(self.spaces)):
+			self.adjustVariable(i, 0)
+		for i in xrange(1, len(possibility)):
+			self.adjustVariable(possibility[i] - 1, 1)
+
+
+	def getBestSeg(self):
 		maxProb = 0
 		bestString = ""
 		for string in self.possibleStrings:
@@ -228,7 +219,7 @@ class NoSpaceText:
 				if word in self.freq_dict:
 					prob *= self.freq_dict[word]
 				else:
-					prob *= self.normalizationFactor
+					prob *= self.transNormFactor
 			if prob > maxProb:
 				bestString = string
 				maxProb = prob
