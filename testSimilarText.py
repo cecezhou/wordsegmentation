@@ -1,15 +1,16 @@
-
-
 import models
 import re
 import enchant
 import helpers
 
-# Use excerpt of "Old man and the Sea" to see how accurate we are.
+# Use "Old man and the Sea" to see how accurate we are.
 # print out comparision numbers for different algorithms - two different greedy ones AND COMPARE
 
 basetext = "oldmansea.txt"
 text = open(basetext).read()
+helpers.parseBaseText()
+print "Segmenting Text..."
+
 
 # remove excess line breaks and all punctuation except periods
 cleantext = re.sub('[^a-zA-Z\n\'.]', ' ', text)
@@ -39,8 +40,8 @@ tallyTransProb = 0
 (freq_dict, normFactor) = helpers.getFreq("alphanumeric.txt")
 (transition_freq_dict, transNormFactor) = helpers.getTransitionFreq("alphanumeric.txt")
 
+# iterate over sentences
 for (idx, sentence) in enumerate(nospace_sentences):
-	# print idx
 	# default max word length as 15 
 	mytext = models.NoSpaceText(sentence, 15)
 	# set frequency dictionaries

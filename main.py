@@ -8,7 +8,6 @@ import parsebasetext
 # text = "thequickbrownfoxjumpsoverthelazydog"
 
 # text = "willIfinishthisproblemsetintimeforvanillawhataresomewordsthatmightnotworkoutchocolatedon't"
-# text = "paidforsleepingtogetherThiswastheendofthetrapThiswaswhatpeoplegotforlovingeachotherThankGodforgasanywayWhatmustithavebeenlikebeforetherewereanaestheticsOnceitstartedtheywereinthemillraceCatherinehadagoodtimeinthetimeofpregnancyItwasn'tbadShewashardlyeversickShewasnotawfullyuncomfortableuntiltowardthelastSonowtheygotherintheend"
 text = open('condensed.txt').read()
 print text
 

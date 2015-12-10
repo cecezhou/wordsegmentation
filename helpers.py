@@ -3,19 +3,17 @@ import enchant
 
 # replace hyphen \n's and all double quotes
 def parseBaseText():
-	print "Type in the file you would like to use for base frequencies"
+	print "Type in the file you would like to use for base frequencies."
+	print "Press enter to default to A Farewell to Arms by Ernest Hemingway"
 	# we provide 'farewell_to_arms.txt' if you would like to use a different file feel free
 	basetext = raw_input()
-
+	if basetext == "":
+		basetext = "farewell_to_arms.txt"
 	string = open(basetext).read()
 	new_str = re.sub('[^a-zA-Z\n\']', ' ', string)
+	# remove excess apostrophes
 	new_str.replace(' \' ','')
 	open('alphanumeric.txt', 'w').write(new_str)
-
-def parseTestText():
-	pass
-
-# parseBaseText()
 
 def normalize(d):
 	factor=1.0/sum(d.itervalues())
