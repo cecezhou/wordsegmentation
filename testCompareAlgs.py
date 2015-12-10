@@ -43,26 +43,25 @@ def compareAlgorithms(comptext):
 
 
 helpers.parseBaseText()
+print "Segmenting Text..."
+
 # process basetexts 
 (freq_dict, normFactor) = helpers.getFreq("alphanumeric.txt")
 (transition_freq_dict, transNormFactor) = helpers.getTransitionFreq("alphanumeric.txt")	
 
-print "Short Text: "
 
 shorttext= "thequickbrownfoxjumpsoverthelazydog"
-print shorttext
+print "Short Text: " + shorttext
 compareAlgorithms(shorttext)
 
-print "Longer Text: "
 
 text = open("songlyrics.txt").read()
 longertext = re.sub('[^a-zA-Z\'.]', '', text)
-print longertext
+print "Longer Text: " + longertext
 compareAlgorithms(longertext)
 
-print "Nonsensical Text: "
 
 nonsensicaltext = "willIfinishthisproblemsetintimeforvanillawhataresomewordsthatmightnotworkoutchocolatedon't"
-print nonsensicaltext
+print "Nonsensical Text: " + nonsensicaltext
 compareAlgorithms(nonsensicaltext)
 

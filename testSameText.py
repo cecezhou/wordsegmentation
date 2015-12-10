@@ -2,9 +2,12 @@ import models
 import re
 import enchant
 import helpers
+import time
 
 # Use "A Farewell to Arms" to see how accurate we are.
 # print out comparision numbers for different algorithms - two different greedy ones AND COMPARE
+
+start_time = time.time()
 
 basetext = "farewell_to_arms.txt"
 text = open(basetext).read()
@@ -67,5 +70,8 @@ print "Using Naive Frequencies:"
 print float(tallyNaiveProb)/(len(sentences))
 print "Using Transition Frequencies:"
 print float(tallyTransProb)/(len(sentences))
+
+print("--- %s total seconds ---\n" % (time.time() - start_time))
+
 
 
